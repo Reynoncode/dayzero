@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maliyyə Menecmenti - İmtahan Konspekti</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #1a202c; font-size: 15px; line-height: 1.6; }
+  
+  header { background: linear-gradient(135deg, #1e3a5f 0%, #2d6a4f 100%); color: white; padding: 20px 16px; text-align: center; }
+  header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  header p { font-size: 13px; opacity: 0.85; }
+
+  nav { background: white; border-bottom: 2px solid #e2e8f0; padding: 0; overflow-x: auto; display: flex; white-space: nowrap; position: sticky; top: 0; z-index: 100; }
+  nav button { padding: 12px 14px; border: none; background: none; font-size: 13px; cursor: pointer; color: #64748b; border-bottom: 3px solid transparent; flex-shrink: 0; font-weight: 500; }
+  nav button.active { color: #1e3a5f; border-bottom-color: #1e3a5f; background: #f0f4ff; }
+  nav button:hover { background: #f8faff; color: #1e3a5f; }
+
+  .page { display: none; padding: 16px; }
+  .page.active { display: block; }
+
+  .section { background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px; border-left: 4px solid #1e3a5f; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .section.green { border-left-color: #2d6a4f; }
+  .section.orange { border-left-color: #c05621; }
+  .section.purple { border-left-color: #553c9a; }
+  .section.red { border-left-color: #c53030; }
+
+  .section h2 { font-size: 16px; color: #1e3a5f; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .section h3 { font-size: 14px; color: #2d3748; margin: 12px 0 6px; font-weight: 600; }
+
+  .formula-box { background: #eef2ff; border: 1px solid #c3d3f7; border-radius: 8px; padding: 12px; margin: 8px 0; text-align: center; font-size: 15px; font-weight: 600; color: #1e3a5f; }
+  .formula-box.green { background: #e6f4ea; border-color: #a8d5b5; color: #1a4731; }
+  .formula-box.orange { background: #fff3e0; border-color: #ffcc80; color: #7b3f00; }
+
+  .key-point { background: #fef9e7; border-left: 3px solid #f6c026; padding: 8px 12px; margin: 6px 0; border-radius: 4px; font-size: 13px; }
+  .warning { background: #fef2f2; border-left: 3px solid #f87171; padding: 8px 12px; margin: 6px 0; border-radius: 4px; font-size: 13px; }
+  .tip { background: #f0fdf4; border-left: 3px solid #4ade80; padding: 8px 12px; margin: 6px 0; border-radius: 4px; font-size: 13px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13px; }
+  th { background: #1e3a5f; color: white; padding: 8px 10px; text-align: left; font-size: 12px; }
+  td { padding: 7px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+  tr:nth-child(even) td { background: #f8faff; }
+  tr:hover td { background: #eef2ff; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin: 2px; }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-green { background: #dcfce7; color: #166534; }
+  .badge-orange { background: #fed7aa; color: #9a3412; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  .badge-purple { background: #ede9fe; color: #5b21b6; }
+
+  .calc-box { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin: 10px 0; }
+  .calc-box input, .calc-box select { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; margin: 4px 0 10px; background: #f8faff; }
+  .calc-box button { width: 100%; padding: 10px; background: #1e3a5f; color: white; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; font-weight: 600; }
+  .calc-box button:hover { background: #2d4e7a; }
+  .result { background: #eef2ff; border-radius: 6px; padding: 10px; margin-top: 10px; font-weight: 600; color: #1e3a5f; text-align: center; font-size: 15px; min-height: 40px; }
+
+  .step { display: flex; gap: 10px; margin: 8px 0; align-items: flex-start; }
+  .step-num { background: #1e3a5f; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+  .step-content { flex: 1; font-size: 14px; }
+
+  .accordion-item { border: 1px solid #e2e8f0; border-radius: 8px; margin: 6px 0; overflow: hidden; }
+  .accordion-header { padding: 12px 14px; cursor: pointer; font-weight: 600; font-size: 14px; background: #f8faff; display: flex; justify-content: space-between; align-items: center; }
+  .accordion-header:hover { background: #eef2ff; }
+  .accordion-body { display: none; padding: 12px 14px; background: white; font-size: 13px; }
+  .accordion-body.open { display: block; }
+  .accordion-arrow { transition: transform 0.2s; font-size: 12px; }
+  .accordion-arrow.open { transform: rotate(180deg); }
+
+  .masele-box { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px; padding: 14px; margin: 10px 0; }
+  .masele-box h4 { color: #92400e; font-size: 14px; margin-bottom: 8px; }
+  .masele-box .solution { background: white; border-radius: 6px; padding: 10px; margin-top: 10px; display: none; font-size: 13px; }
+  .masele-box .solution.show { display: block; }
+  .show-btn { background: #92400e; color: white; border: none; padding: 7px 14px; border-radius: 6px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+  .show-btn:hover { background: #78350f; }
+
+  .quiz-container { }
+  .quiz-question { background: white; border-radius: 10px; padding: 14px; margin: 10px 0; border: 1px solid #e2e8f0; }
+  .quiz-question p { font-size: 14px; margin-bottom: 10px; font-weight: 500; }
+  .quiz-option { display: block; padding: 8px 12px; margin: 4px 0; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
+  .quiz-option:hover { background: #f0f4ff; border-color: #93c5fd; }
+  .quiz-option.correct { background: #dcfce7; border-color: #4ade80; color: #166534; }
+  .quiz-option.wrong { background: #fee2e2; border-color: #f87171; color: #991b1b; }
+  .quiz-feedback { font-size: 12px; margin-top: 6px; padding: 6px 10px; border-radius: 4px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .metric-card { background: #f8faff; border-radius: 8px; padding: 12px; text-align: center; border: 1px solid #e2e8f0; }
+  .metric-card .num { font-size: 22px; font-weight: 700; color: #1e3a5f; }
+  .metric-card .label { font-size: 11px; color: #64748b; margin-top: 2px; }
+
+  .progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; margin: 8px 0; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #1e3a5f, #2d6a4f); border-radius: 4px; transition: width 0.3s; }
+
+  .tag { display: inline-block; background: #1e3a5f; color: white; padding: 3px 10px; border-radius: 12px; font-size: 11px; margin: 2px; }
+
+  @media (max-width: 400px) {
+    .grid2 { grid-template-columns: 1fr; }
+    header h1 { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📊 Maliyyə Menecmenti</h1>
+  <p>İmtahan üçün tam konspekt</p>
+</header>
+
+<nav>
+  <button class="active" onclick="showPage('istiqraz')">İstiqrazlar</button>
+  <button onclick="showPage('sehm')">Səhmlər</button>
+  <button onclick="showPage('risk')">Risk</button>
+  <button onclick="showPage('investisiya')">İnvestisiya</button>
+  <button onclick="showPage('inventar')">EOQ/Dövriyyə</button>
+  <button onclick="showPage('kalkulyator')">🧮 Kalkulyator</button>
+  <button onclick="showPage('quiz')">📝 Test</button>
+</nav>
+
+<!-- ============ PAGE 1: İSTİQRAZLAR ============ -->
+<div id="istiqraz" class="page active">
+
+  <div class="section">
+    <h2>🏦 İstiqraz nədir?</h2>
+    <p style="font-size:13px; color:#4a5568;">İstiqraz (Bond) — şirkətin və ya dövlətin borc aldığı, müddətin sonunda geri qaytarmağı öhdə olduğu <b>borc qiymətli kağızıdır</b>.</p>
+    <br>
+    <div class="grid2">
+      <div class="metric-card"><div class="num">Kupon</div><div class="label">İllik faiz ödənişi</div></div>
+      <div class="metric-card"><div class="num">Nominal</div><div class="label">Üzərindəki yazılı dəyər</div></div>
+      <div class="metric-card"><div class="num">MSG/YTM</div><div class="label">Müddətin sonunadək gəlirlilik</div></div>
+      <div class="metric-card"><div class="num">Defolt</div><div class="label">Ödəniş qabiliyyətsizliyi</div></div>
+    </div>
+
+    <h3>İstiqrazı buraxan tərəfin öhdəlikləri:</h3>
+    <div class="step"><div class="step-num">1</div><div class="step-content">İstiqrazın müddəti bitənədək <b>müntəzəm kupon ödənişləri</b> etmək</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Müddətin sonunda istiqrazın <b>nominal dəyərini</b> ödəmək</div></div>
+
+    <div class="warning">⚠️ <b>Defolt</b> — bu öhdəlikləri yerinə yetirə bilməmək. Defolt olduqda emitentlər hüquqi məsuliyyətə cəlb edilə bilər.</div>
+  </div>
+
+  <div class="section green">
+    <h2>📐 Əsas Düsturlar</h2>
+
+    <h3>1. Kupon Faiz Dərəcəsi</h3>
+    <div class="formula-box green">Kupon dərəcəsi = İllik kupon ödənişi ÷ Nominal dəyər</div>
+    <div class="tip">✏️ Misal: $80 ÷ $1000 = 8%</div>
+
+    <h3>2. Cari Gəlirlilik</h3>
+    <div class="formula-box green">Cari gəlirlilik = İllik kupon ÷ Cari bazar qiyməti</div>
+    <div class="tip">✏️ Misal: $80 ÷ $924.18 = 8.66%</div>
+
+    <h3>3. İstiqrazın Bazar Qiyməti (Əsas Düstur!)</h3>
+    <div class="formula-box">P₀ = (Div₁ + P₁) ÷ (1 + r)</div>
+    <p style="font-size:12px; color:#64748b; margin:4px 0 8px; text-align:center;">və ya tam forması:</p>
+    <div class="formula-box">P = Kupon × [1 - 1/(1+r)ⁿ]/r + Nominal ÷ (1+r)ⁿ</div>
+    <div class="key-point">💡 <b>P</b> = cari qiymət, <b>r</b> = tələb olunan gəlirlilik, <b>n</b> = il sayı</div>
+
+    <h3>4. MSG Tapmaq üçün (Yoxlama metodu)</h3>
+    <p style="font-size:13px; margin-bottom:6px;">r-in yerinə müxtəlif dəyərlər qoyub yoxlamaq lazımdır:</p>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAcc(this)">📊 Misal: $924.18 qiyməti, $80 kupon, $1000 nominal, 5 il <span class="accordion-arrow">▼</span></div>
+      <div class="accordion-body">
+        <p style="font-size:13px; margin-bottom:6px;">Hesablama:</p>
+        <ul style="font-size:13px; padding-left:16px;">
+          <li>8% ilə: $80×[1-1/(1.08)⁵]/0.08 + $1000/(1.08)⁵ = <b>$1000</b></li>
+          <li>9% ilə: $80×[1-1/(1.09)⁵]/0.09 + $1000/(1.09)⁵ = <b>$961.10</b></li>
+          <li style="color:#1e3a5f; font-weight:700;">10% ilə: $80×[1-1/(1.10)⁵]/0.10 + $1000/(1.10)⁵ = <b>$924.18 ✓</b></li>
+        </ul>
+        <div class="tip">MSG = 10% — çünki bu dərəcə ilə düstur bazar qiymətinə bərabər verir.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section orange">
+    <h2>⚖️ İstiqraz Qiyməti Qaydaları</h2>
+
+    <table>
+      <tr><th>Vəziyyət</th><th>Nəticə</th><th>Ad</th></tr>
+      <tr><td>Kupon dərəcəsi = MSG</td><td>Qiymət = Nominal</td><td><span class="badge badge-blue">Par/Normal</span></td></tr>
+      <tr><td>Kupon dərəcəsi &gt; MSG</td><td>Qiymət &gt; Nominal</td><td><span class="badge badge-green">Premium</span></td></tr>
+      <tr><td>Kupon dərəcəsi &lt; MSG</td><td>Qiymət &lt; Nominal</td><td><span class="badge badge-red">Diskont</span></td></tr>
+    </table>
+
+    <div class="key-point">💡 <b>Əsas qayda:</b> İstiqraz qiyməti ilə MSG <b>TƏRSİNƏ MÜTƏNASİB</b>dir — MSG artarsa qiymət düşür, MSG azalarsa qiymət artır!</div>
+
+    <h3>Faiz Dərəcəsi Riski:</h3>
+    <div class="step"><div class="step-num">1</div><div class="step-content"><b>Uzunmüddətli</b> istiqrazlar faiz dəyişikliklərinə <b>daha çox</b> həssasdır</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><b>Aşağı kuponlu</b> istiqrazlar faiz dəyişikliklərinə <b>daha çox</b> həssasdır</div></div>
+  </div>
+
+  <div class="section purple">
+    <h2>⭐ Kredit Reytinqləri</h2>
+    <table>
+      <tr><th>Moody's</th><th>S&P</th><th>Məna</th><th>Kateqoriya</th></tr>
+      <tr><td>Aaa</td><td>AAA</td><td>Ən yüksək keyfiyyət</td><td><span class="badge badge-green">İnvestisiya</span></td></tr>
+      <tr><td>Aa</td><td>AA</td><td>Çox yüksək keyfiyyət</td><td><span class="badge badge-green">İnvestisiya</span></td></tr>
+      <tr><td>A</td><td>A</td><td>Yüksək keyfiyyət</td><td><span class="badge badge-green">İnvestisiya</span></td></tr>
+      <tr><td>Baa</td><td>BBB</td><td>Orta keyfiyyət (ən aşağı inv.)</td><td><span class="badge badge-blue">İnvestisiya</span></td></tr>
+      <tr><td>Ba/B</td><td>BB/B</td><td>Spekulyativ</td><td><span class="badge badge-orange">Junk/Zibil</span></td></tr>
+      <tr><td>Caa-C</td><td>CCC-D</td><td>Çox spekulyativ, defolt</td><td><span class="badge badge-red">Junk/Zibil</span></td></tr>
+    </table>
+    <div class="warning">⚠️ BB/Ba və aşağısı = "Junk Bonds" (Zibil İstiqrazlar) — investisiya reytinqi yoxdur, defolt riski yüksəkdir!</div>
+  </div>
+
+  <div class="section">
+    <h2>🔄 Konvertasiya Edilə Bilən İstiqrazlar</h2>
+    <p style="font-size:13px; margin-bottom:8px;">Bu istiqrazlar səhmlərə çevrilə bilir. Onlar <b>mürəkkəb maliyyə aləti</b>dir:</p>
+    <div class="grid2">
+      <div class="metric-card"><div class="num" style="font-size:15px;">Maliyyə<br>Öhdəliyi</div><div class="label">Diskontlaşdırılmış dəyər (effektiv faizlə)</div></div>
+      <div class="metric-card"><div class="num" style="font-size:15px;">Kapital<br>Elementi</div><div class="label">Nominal − Maliyyə öhdəliyi</div></div>
+    </div>
+    <div class="formula-box">Kapital elementi = Nominal dəyər − Maliyyə öhdəliyinin cari dəyəri</div>
+    
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAcc(this)">📊 Misal: Konvertasiya istiqrazı (Sual 16-17) <span class="accordion-arrow">▼</span></div>
+      <div class="accordion-body">
+        <ul style="font-size:13px; padding-left:16px; line-height:1.8;">
+          <li>Nominal: 30,000,000 AZN</li>
+          <li>Kupon: 8% → ödəniş = 2,400,000 AZN/il</li>
+          <li>Effektiv bazar dərəcəsi: 10%</li>
+          <li>Maliyyə öhdəliyi: 28,476,000 AZN (diskontlaşdırılmış)</li>
+          <li><b>Kapital elementi = 30,000,000 − 28,476,000 = 1,524,000 AZN</b></li>
+          <li>Amortizasiya: 28,476,000 × 10% − 2,400,000 = 447,600 AZN artır</li>
+          <li>Yeni balans = 28,476,000 + 447,600 = <b>28,923,600 AZN</b></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ PAGE 2: SƏHMLƏR ============ -->
+<div id="sehm" class="page">
+
+  <div class="section">
+    <h2>📈 Səhm növləri</h2>
+    <table>
+      <tr><th>Xüsusiyyət</th><th>Adi Səhm</th><th>İmtiyazlı Səhm</th></tr>
+      <tr><td>Dividend</td><td>Sabit deyil</td><td>Sabit/prioritet</td></tr>
+      <tr><td>Səs hüququ</td><td>Var</td><td>Adətən yoxdur</td></tr>
+      <tr><td>Likvidasiyada</td><td>Sonuncu</td><td>İmtiyazlı</td></tr>
+      <tr><td>Defolt riski</td><td>Yoxdur (kapital)</td><td>Yoxdur (kapital)</td></tr>
+    </table>
+    <div class="key-point">💡 Adi səhmlər üzrə dividend ödənməsə, şirkət <b>defolt elan edilmir</b> — bu istiqrazdan fərqidir!</div>
+  </div>
+
+  <div class="section green">
+    <h2>📐 Fundamental Dəyər Nəzəriyyəsi</h2>
+    <div class="key-point">💡 Hər hansı maliyyə aktivinin dəyəri = Gələcək bütün pul axınlarının <b>cari (diskontlaşdırılmış) dəyəri</b></div>
+
+    <h3>Model 1: Sıfır Artım (Zero Growth)</h3>
+    <div class="formula-box">P₀ = D₁ ÷ R</div>
+    <div class="tip">✏️ D₁=1 manat, R=10% → P₀ = 1 ÷ 0.10 = <b>10 manat</b></div>
+    <div class="warning">⚠️ Sıfır artımlı səhmdə <b>kapital artımı gəliri yoxdur</b> — qiymət heç vaxt dəyişmir!</div>
+
+    <h3>Model 2: Sabit Artım — Gordon Modeli (ən vacib!)</h3>
+    <div class="formula-box">P₀ = D₁ ÷ (R − g)</div>
+    <p style="font-size:12px; color:#64748b; text-align:center; margin:4px 0 8px;">D₁ = gözlənilən divident, R = tələb olunan gəlirlilik, g = sabit artım tempi</p>
+    
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAcc(this)">📊 Misal: D₀=5 manat, g=5%, R=9% <span class="accordion-arrow">▼</span></div>
+      <div class="accordion-body">
+        <ul style="font-size:13px; padding-left:16px; line-height:1.8;">
+          <li>D₁ = D₀ × (1+g) = 5 × 1.05 = <b>5.25 manat</b></li>
+          <li>P₀ = D₁ ÷ (R−g) = 5.25 ÷ (0.09−0.05) = 5.25 ÷ 0.04 = <b>131.25 manat</b></li>
+          <li>Bir il sonra: P₁ = D₂ ÷ (R−g) = (5.25×1.05) ÷ 0.04 = <b>137.8125 manat</b></li>
+        </ul>
+        <div class="tip">P₁ P₀-dan yüksəkdir → bu kapital gəlirliliyidir!</div>
+      </div>
+    </div>
+
+    <div class="warning">⚠️ Gordon modeli üçün şərt: <b>R &gt; g</b> mütləq olmalıdır! g≥R olsa model işləmir.</div>
+
+    <h3>Tələb olunan gəlirliliyi tapmaq:</h3>
+    <div class="formula-box">R = (D₁ ÷ P₀) + g</div>
+    <div class="tip">✏️ D₁=5.25, P₀=65.625, g=5% → R = 5.25/65.625 + 0.05 = 0.08 + 0.05 = <b>13%</b></div>
+
+    <h3>Ümumi Gəlirlilik:</h3>
+    <div class="formula-box green">R = Divident gəlirliliyi (D₁/P₀) + Kapital artımı gəlirliliyi (g)</div>
+  </div>
+
+  <div class="section orange">
+    <h2>🔄 Model 3: Qeyri-Sabit Artım</h2>
+    <p style="font-size:13px; margin-bottom:10px;">Əvvəl yüksək artım, sonra sabit artım. Addım-addım həll edilir:</p>
+
+    <div class="step"><div class="step-num">1</div><div class="step-content">Hər ilin dividendini ayrı-ayrılıqda hesabla (D₁, D₂, D₃...)</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Sabit artıma keçən andan Gordon modeli ilə <b>terminal dəyəri</b> tap</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">Hər dividenddi və terminal dəyəri diskontlaşdır (bugünə gətir)</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content">Cəmlə — bu P₀-dur</div></div>
+
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAcc(this)">📊 Misal: D₀=5, il 1-2: 10%, il 3: 8%, il 4+: 6%, R=12% <span class="accordion-arrow">▼</span></div>
+      <div class="accordion-body">
+        <table>
+          <tr><th>Zaman</th><th>Divident</th><th>Artım</th></tr>
+          <tr><td>0</td><td>5.00</td><td>—</td></tr>
+          <tr><td>1</td><td>5.50</td><td>10%</td></tr>
+          <tr><td>2</td><td>6.05</td><td>10%</td></tr>
+          <tr><td>3</td><td>6.534</td><td>8%</td></tr>
+          <tr><td>4</td><td>6.926</td><td>6%</td></tr>
+        </table>
+        <p style="font-size:13px; margin-top:8px;">P₃ (terminal) = D₄ ÷ (R−g) = 6.926 ÷ (0.12−0.06) = 115.43</p>
+        <p style="font-size:13px;">P₀ = 5.50/1.12 + 6.05/1.12² + (6.534+115.43)/1.12³</p>
+      </div>
+    </div>
+
+    <h3>Model 4: Gecikmeli Artım (Yeni şirkət)</h3>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAcc(this)">📊 Misal: MB şirkəti — 5 il divident yoxdur <span class="accordion-arrow">▼</span></div>
+      <div class="accordion-body">
+        <ul style="font-size:13px; padding-left:16px; line-height:1.8;">
+          <li>5 il divident ödənmir</li>
+          <li>6-cı ilin sonunda D₆ = 6 manat gözlənilir</li>
+          <li>Bundan sonra g = 5% (daimi)</li>
+          <li>R = 21%</li>
+          <li>P₅ = D₆ ÷ (R−g) = 6 ÷ (0.21−0.05) = 37.5 manat</li>
+          <li>P₀ = 37.5 ÷ (1.21)⁵ = <b>bugünkü dəyər</b></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🐟 Fişer Effekti</h2>
+    <div class="formula-box">1 + R = (1 + r) × (1 + h)</div>
+    <p style="font-size:12px; color:#64748b; text-align:center;">R = nominal, r = real, h = inflyasiya</p>
+    <br>
+    <div class="formula-box green">r = (1+R) ÷ (1+h) − 1</div>
+    <div class="tip">✏️ R=10%, h=5% → r = (1.10 ÷ 1.05) − 1 = 4.76% (TƏXMİNİ deyil, DƏQIQ!</div>
+    <div class="warning">⚠️ Sadə fərq formula (R−h = 10%−5% = 5%) TƏXMİNİDİR — imtahanda dəqiq Fişer düsturu istifadə et!</div>
+  </div>
+
+</div>
+
+<!-- ============ PAGE 3: RİSK ============ -->
+<div id="risk" class="page">
+
+  <div class="section">
+    <h2>⚡ Risk Anlayışı</h2>
+    <p style="font-size:13px; margin-bottom:10px;">Risk — dayar kəsb edən hər hansı bir əmlakın, vasaitin, vaxtın itirilmə ehtimalıdır.</p>
+
+    <h3>Riskin 4 əsas xüsusiyyəti:</h3>
+    <div class="step"><div class="step-num">1</div><div class="step-content"><b>Qeyri-müəyyənlik</b> — hadisələrin bir neçə istiqamətdə inkişaf etmə ehtimalı</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><b>Zərər</b> — neqativ nəticəyə səbəb olma ehtimalı</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><b>Analiz imkanı</b> — kəmiyyət/keyfiyyət üzrə qiymətləndirilə bilmə</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><b>Əhəmiyyətlilik</b> — ən azı bir subyektin maraqlarına aid olma</div></div>
+    <div class="warning">⚠️ Test sualı: "Mütləqlik" (subyektdən asılı olmayan risk) — bu YANLIŞ xüsusiyyətdir!</div>
+
+    <h3>Risklə davranış üsulları:</h3>
+    <table>
+      <tr><th>Üsul</th><th>İzah</th></tr>
+      <tr><td><span class="badge badge-blue">Qəbul etmə</span></td><td>Riski qəbul edib davam etmə</td></tr>
+      <tr><td><span class="badge badge-red">İmtina etmə</span></td><td>Riskli fəaliyyətdən çəkinmə</td></tr>
+      <tr><td><span class="badge badge-orange">Transfer (Hec)</span></td><td>Fyuçers/opsionla riski ötürmə — potensial qazancdan da imtina!</td></tr>
+      <tr><td><span class="badge badge-purple">Mitiqasiya</span></td><td>Riskin təsirini azaltma</td></tr>
+      <tr><td><span class="badge badge-green">Diversifikasiya</span></td><td>Portfeli genişləndirərək azaltma</td></tr>
+    </table>
+    <div class="key-point">💡 <b>Risk Premiyası</b> = İnvestorların riskli aktiv üçün risksiz aktivdən ƏLAVƏ tələb etdiyi gəlir</div>
+  </div>
+
+  <div class="section green">
+    <h2>📊 Riskin Ölçülməsi</h2>
+
+    <div class="formula-box green">Dispersiya (σ²) = [(r₁-r̄)² + (r₂-r̄)² + ...] ÷ (n-1)</div>
+    <div class="formula-box">Standart Xəta (σ) = √Dispersiya</div>
+
+    <div class="tip">✏️ Dispersiya = 450 → Standart xəta = √450 = <b>21.2%</b></div>
+    <div class="tip">✏️ Dispersiya = 1676.9 → Standart xəta = √1676.9 = <b>40.95</b></div>
+
+    <h3>Portfelin Gözlənilən Gəlirliliyi:</h3>
+    <div class="formula-box green">E(R) = x₁ × r₁ + x₂ × r₂</div>
+    <p style="font-size:12px; color:#64748b; text-align:center;">x₁, x₂ = portfeldəki çəkilər (paylar), r₁, r₂ = gəlirlilik dərəcələri</p>
+
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAcc(this)">📊 Misal: A1=4000 AZN (r=25%), A2=6000 AZN (r=15%) <span class="accordion-arrow">▼</span></div>
+      <div class="accordion-body">
+        <ul style="font-size:13px; padding-left:16px; line-height:1.8;">
+          <li>Toplam = 4000 + 6000 = 10,000 AZN</li>
+          <li>x₁ = 4000/10000 = 0.3; x₂ = 6000/10000 = 0.7</li>
+          <li>E(R) = 0.25×0.3 + 0.15×0.7 = 0.075 + 0.105 = <b>0.18 = 18%</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>İki Aktivin Portfel Dispersiyası:</h3>
+    <div class="formula-box">σ²p = x₁²σ₁² + x₂²σ₂² + 2(x₁×x₂×ρ₁₂×σ₁×σ₂)</div>
+    <p style="font-size:12px; color:#64748b; text-align:center;">ρ₁₂ = korrelyasiya əmsalı (−1 ilə +1 arasında)</p>
+
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAcc(this)">📊 Misal: Coca-Cola (65%, σ=31.5) + Reebok (35%, σ=58.5), ρ=1 <span class="accordion-arrow">▼</span></div>
+      <div class="accordion-body">
+        <ul style="font-size:13px; padding-left:16px; line-height:1.8;">
+          <li>x₁=0.65, σ₁=31.5; x₂=0.35, σ₂=58.5; ρ=1</li>
+          <li>σ²p = (0.65)²(31.5)² + (0.35)²(58.5)² + 2(0.65)(0.35)(1)(31.5)(58.5)</li>
+          <li>= 418.5 + 419.3 + 839.1 = <b>1676.9</b></li>
+          <li>σp = √1676.9 = <b>40.95</b></li>
+          <li>E(R) = 10%×0.65 + 20%×0.35 = 6.5% + 7% = <b>13.5%</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Korrelyasiya Əmsalının Əhəmiyyəti:</h3>
+    <table>
+      <tr><th>ρ dəyəri</th><th>Məna</th><th>Diversifikasiya effekti</th></tr>
+      <tr><td>ρ = +1</td><td>Tam müsbət korrelyasiya</td><td>Sıfır — heç bir azalma yoxdur</td></tr>
+      <tr><td>0 &lt; ρ &lt; 1</td><td>Qismən müsbət</td><td>Qismən azalma</td></tr>
+      <tr><td>ρ = 0</td><td>Korrelyasiya yoxdur</td><td>Yaxşı azalma</td></tr>
+      <tr><td>ρ = -1</td><td>Tam mənfi korrelyasiya</td><td><b>Tam eliminasiya mümkündür!</b></td></tr>
+    </table>
+  </div>
+
+  <div class="section purple">
+    <h2>📉 Sistem vs Qeyri-Sistem Riski</h2>
+    <div class="grid2">
+      <div class="metric-card" style="border: 2px solid #f87171;">
+        <div class="num" style="font-size:14px; color:#c53030;">Sistem Riski</div>
+        <div class="label">Bazar riski • Diversifikasiya ilə aradan qaldırılamaz! • Makroiqtisadi amillər</div>
+      </div>
+      <div class="metric-card" style="border: 2px solid #4ade80;">
+        <div class="num" style="font-size:14px; color:#166534;">Qeyri-Sistem Riski</div>
+        <div class="label">Firma/sahə spesifik • Diversifikasiya ilə aradan qaldırılır!</div>
+      </div>
+    </div>
+
+    <h3>Beta Əmsalı (β)</h3>
+    <p style="font-size:13px; margin-bottom:8px;">Aktivin sistem riskini bazar portfelinə nisbətdə ölçür:</p>
+    <table>
+      <tr><th>Beta dəyəri</th><th>Məna</th><th>Növ</th></tr>
+      <tr><td>β = 0</td><td>Risksiz aktiv (dövlət istiqrazı)</td><td><span class="badge badge-green">Risksiz</span></td></tr>
+      <tr><td>β = 1</td><td>Bazar portfeli ilə eyni risk</td><td><span class="badge badge-blue">Bazar</span></td></tr>
+      <tr><td>β &lt; 1</td><td>Bazardan az riskli</td><td><span class="badge badge-green">Defensiv</span></td></tr>
+      <tr><td>β &gt; 1</td><td>Bazardan çox riskli</td><td><span class="badge badge-red">Aqressiv</span></td></tr>
+    </table>
+
+    <h3>CAPM Düsturu</h3>
+    <div class="formula-box">R = Rf + β × (Rm − Rf)</div>
+    <p style="font-size:12px; color:#64748b; text-align:center;">Rf = risksiz dərəcə; Rm = bazar gəlirliliyi; (Rm−Rf) = bazar risk premiyası</p>
+    <div class="tip">✏️ Rf=5%, Rm=12%, β=1.2 → R = 5% + 1.2×(12%−5%) = 5% + 8.4% = <b>13.4%</b></div>
+
+    <h3>SML — Qiymətli Kağızlar Bazarı Xətti:</h3>
+    <div class="key-point">💡 CAPM-in qrafik təsviri — beta ilə tələb olunan gəlirliliyi birləşdirir. Bu xətt üzərindəki aktivlər düzgün qiymətləndirilmişdir.</div>
+  </div>
+
+</div>
+
+<!-- ============ PAGE 4: İNVESTİSİYA ============ -->
+<div id="investisiya" class="page">
+
+  <div class="section">
+    <h2>💼 İnvestisiya Layihəsinin Qiymətləndirilməsi</h2>
+
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAcc(this)">📊 Geri ödənmə müddəti (Payback Period) <span class="accordion-arrow">▼</span></div>
+      <div class="accordion-body">
+        <p style="font-size:13px; margin-bottom:6px;">İlkin investisiyanın nə qədər müddətdə geri qayıdacağını göstərir. Sadə, amma pul axınlarının vaxt dəyərini nəzərə almır.</p>
+        <div class="formula-box">Geri ödənmə müddəti = İnvestisiya ÷ İllik pul axını</div>
+        <div class="warning">⚠️ Bu metod kapitaiın itirilmiş imkan dəyərini (faiz) nəzərə almır — çatışmazlıqdır!</div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAcc(this)">📊 Xalis Cari Dəyər (NPV / CD) <span class="accordion-arrow">▼</span></div>
+      <div class="accordion-body">
+        <div class="formula-box">NPV = −İnvestisiya + Σ [Pul axını ÷ (1+r)ⁿ]</div>
+        <ul style="font-size:13px; padding-left:16px; line-height:1.8; margin-top:8px;">
+          <li>NPV &gt; 0 → layihəni qəbul et</li>
+          <li>NPV &lt; 0 → layihəni rədd et</li>
+          <li>Bir neçə layihə varsa → ən yüksək NPV-ni seç</li>
+        </ul>
+        <div class="tip">💡 NPV zaman dəyərini nəzərə alır — ən etibarlı metoddur!</div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAcc(this)">📊 Mənfəətlilik İndeksi (MI) <span class="accordion-arrow">▼</span></div>
+      <div class="accordion-body">
+        <div class="formula-box">MI = CD ÷ İnvestisiya</div>
+        <p style="font-size:13px; margin:8px 0;">Resurs məhdudiyyəti olduqda hansı layihəyə üstünlük veriləcəyini göstərir:</p>
+        <table>
+          <tr><th>Layihə</th><th>CD</th><th>İnvestisiya</th><th>MI</th></tr>
+          <tr><td>A</td><td>230,000</td><td>200,000</td><td>1.15</td></tr>
+          <tr><td>B</td><td>141,250</td><td>125,000</td><td>1.13</td></tr>
+          <tr><td>C</td><td>194,250</td><td>175,000</td><td>1.11</td></tr>
+          <tr><td>D</td><td>162,000</td><td>150,000</td><td>1.08</td></tr>
+        </table>
+        <p style="font-size:13px; margin-top:8px;">Resurs: 300,000 manat → A (200K) + B (125K) = 325K — çox. A (200K) + C (175K) = 375K — çox. A (200K) + D (150K) = 350K — çox. B (125K) + C (175K) = 300K ✓ → <b>B+C seçilir</b></p>
+      </div>
+    </div>
+
+    <div class="masele-box">
+      <h4>📝 Müəllimin Məsələsi 1 — NPV ilə layihə seçimi</h4>
+      <p style="font-size:13px;">6000 manat resurs, kapitalın imkan dəyəri 10%. Hansı layihəni seçərdiniz?</p>
+      <table style="font-size:12px; margin-top:8px;">
+        <tr><th>Layihə</th><th>Hal-hazırda</th><th>1-ci il</th><th>2-ci il</th><th>3-cü il</th></tr>
+        <tr><td>A</td><td>-4500</td><td>1000</td><td>2000</td><td>4000</td></tr>
+        <tr><td>B</td><td>-1500</td><td>0</td><td>1000</td><td>3000</td></tr>
+        <tr><td>C</td><td>-1200</td><td>100</td><td>450</td><td>2000</td></tr>
+        <tr><td>D</td><td>-5000</td><td>1000</td><td>3000</td><td>4500</td></tr>
+      </table>
+      <button class="show-btn" onclick="toggleSolution(this)">✅ Həll yolunu göstər</button>
+      <div class="solution">
+        <p style="font-size:13px; line-height:1.8;"><b>NPV hesablanır (r=10%):</b><br>
+        NPV(A) = -4500 + 1000/1.1 + 2000/1.21 + 4000/1.331 = -4500+909+1653+3005 = <b>+1067</b><br>
+        NPV(B) = -1500 + 0 + 1000/1.21 + 3000/1.331 = -1500+826+2254 = <b>+1580</b><br>
+        NPV(C) = -1200 + 91 + 372 + 1503 = <b>+766</b><br>
+        NPV(D) = -5000 + 909 + 2479 + 3382 = <b>+1770</b><br><br>
+        Resurs 6000 manat: B(1500)+D(5000)=6500 — çox. A(4500)+B(1500)=6000 ✓<br>
+        <b>A+B seçilir: NPV = 1067+1580 = 2647 manat</b></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section green">
+    <h2>🔄 Pul Dövriyyəsi (Cash Cycle)</h2>
+
+    <div class="formula-box green">Pul Əməliyyat Dövrü = Material dövriyyəsi + Debitor dövriyyəsi − Kreditor dövriyyəsi</div>
+
+    <h3>Dövriyyə müddətlərini hesablamaq:</h3>
+    <div class="step"><div class="step-num">1</div><div class="step-content"><b>Material ehtiyatlarının dövriyyəsi</b> = Mal.ehtiyatlar ÷ Satışın maya dəyəri × 360</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><b>Debitor borcların orta yığım müddəti</b> = Debitor borclар ÷ Kredit satışlar × 360</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><b>Kreditor borcların orta ödəniş müddəti</b> = Kreditor borclар ÷ Kredit alışlar × 360</div></div>
+
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAcc(this)">📊 Orion Co. Məsələsi (2022-2023 müqayisəsi) <span class="accordion-arrow">▼</span></div>
+      <div class="accordion-body">
+        <table style="font-size:12px;">
+          <tr><th>Göstərici</th><th>2022</th><th>2023</th></tr>
+          <tr><td>Mal.material ehtiyatları</td><td>800</td><td>920</td></tr>
+          <tr><td>Debitor borclar</td><td>600</td><td>720</td></tr>
+          <tr><td>Kreditor borclar</td><td>550</td><td>600</td></tr>
+          <tr><td>Kredit satışlar</td><td>7,200</td><td>8,000</td></tr>
+          <tr><td>Kredit alışlar</td><td>3,600</td><td>4,200</td></tr>
+          <tr><td>Satışın maya dəyəri</td><td>6,400</td><td>7,200</td></tr>
+        </table>
+        <p style="font-size:12px; margin-top:8px; color:#4a5568;">Əlavə məlumat: Orta işləmə müddəti 25 gün; 360 gün qəbul edilir</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ PAGE 5: EOQ / İNVENTAR ============ -->
+<div id="inventar" class="page">
+
+  <div class="section">
+    <h2>📦 EOQ — İqtisadi Sifariş Həcmi</h2>
+    <p style="font-size:13px; margin-bottom:10px;">Sifariş xərclərini və saxlama xərclərini minimuma endirən <b>optimal sifariş miqdarı</b>.</p>
+
+    <div class="formula-box">EOQ = √(2 × C₀ × D ÷ Cₕ)</div>
+    <table>
+      <tr><th>Simvol</th><th>Məna</th></tr>
+      <tr><td><b>D</b></td><td>İllik tələb (istehlak)</td></tr>
+      <tr><td><b>C₀</b></td><td>Bir sifariş üzrə xərc</td></tr>
+      <tr><td><b>Cₕ</b></td><td>1 vahidin illik saxlama xərci</td></tr>
+    </table>
+
+    <h3>Cəmi Xərclər:</h3>
+    <div class="formula-box green">Cəmi sifariş xərci = (D ÷ Q) × C₀</div>
+    <div class="formula-box green">Cəmi saxlama xərci = (Q ÷ 2) × Cₕ</div>
+    <div class="key-point">💡 EOQ nöqtəsində: Cəmi sifariş xərci = Cəmi saxlama xərci</div>
+
+    <div class="masele-box">
+      <h4>📝 Nellone Co. Məsələsi</h4>
+      <table style="font-size:12px; margin:8px 0;">
+        <tr><td>Z komponenti illik tələb</td><td>50,000</td></tr>
+        <tr><td>1 vahidin qiyməti</td><td>$0.12</td></tr>
+        <tr><td>İllik saxlama xərcləri</td><td>0.02 (vahid üzrə)</td></tr>
+        <tr><td>1 sifariş üzrə xərc</td><td>$6</td></tr>
+      </table>
+      <button class="show-btn" onclick="toggleSolution(this)">✅ Həll yolunu göstər</button>
+      <div class="solution">
+        <p style="font-size:13px; line-height:1.8;">
+        <b>1. EOQ:</b> √(2 × 6 × 50,000 ÷ 0.02) = √(30,000,000) = <b>5,477 vahid</b><br>
+        <b>2. İllik sifariş sayı:</b> 50,000 ÷ 5,477 = <b>9.13 sifariş</b><br>
+        <b>3. Cəmi sifariş xərci:</b> 9.13 × 6 = <b>$54.77</b><br>
+        <b>4. Cəmi saxlama xərci:</b> (5,477÷2) × 0.02 = <b>$54.77</b><br>
+        <b>5. Cəmi xərc:</b> 54.77 + 54.77 = <b>$109.54</b>
+        </p>
+      </div>
+    </div>
+
+    <div class="masele-box">
+      <h4>📝 Xəzər Co. Məsələsi</h4>
+      <p style="font-size:13px;">250 iş günü (50 həftə), gündə 40 podşipnik, alış qiyməti $2, hər sifariş xərci $64, saxlama xərci = alış qiymətinin 25%-i</p>
+      <button class="show-btn" onclick="toggleSolution(this)">✅ Həll yolunu göstər</button>
+      <div class="solution">
+        <p style="font-size:13px; line-height:1.8;">
+        <b>D</b> = 40 × 250 = 10,000 vahid/il<br>
+        <b>C₀</b> = $64<br>
+        <b>Cₕ</b> = $2 × 25% = $0.50<br>
+        <b>EOQ</b> = √(2 × 64 × 10,000 ÷ 0.50) = √(2,560,000) = <b>1,600 vahid</b>
+        </p>
+      </div>
+    </div>
+
+    <div class="masele-box">
+      <h4>📝 Y komponenti məsələsi (5 tapşırıqlı)</h4>
+      <table style="font-size:12px; margin:8px 0;">
+        <tr><td>İllik tələb (D)</td><td>72,000 vahid</td></tr>
+        <tr><td>1 vahidin alış qiyməti</td><td>$0.25</td></tr>
+        <tr><td>İllik saxlama xərci (H)</td><td>$0.05</td></tr>
+        <tr><td>1 sifariş üzrə xərc (S)</td><td>$9</td></tr>
+        <tr><td>İş günlərinin sayı</td><td>360</td></tr>
+        <tr><td>Tochizat müddəti (lead time)</td><td>6 gün</td></tr>
+      </table>
+      <button class="show-btn" onclick="toggleSolution(this)">✅ 5 tapşırığın həlli</button>
+      <div class="solution">
+        <p style="font-size:13px; line-height:1.8;">
+        <b>1. EOQ:</b> √(2×9×72,000 ÷ 0.05) = √(25,920,000) = <b>5,091 vahid</b><br>
+        <b>2. İllik sifariş sayı:</b> 72,000 ÷ 5,091 = <b>≈14.14 sifariş</b><br>
+        <b>3. Orta ehtiyat:</b> EOQ ÷ 2 = 5,091 ÷ 2 = <b>≈2,546 vahid</b><br>
+        <b>4. Cəmi xərc:</b> (72,000/5,091)×9 + (5,091/2)×0.05 = 127.3 + 127.3 = <b>$254.6</b><br>
+        <b>5. Təkrar sifariş nöqtəsi:</b> (72,000÷360) × 6 = 200 × 6 = <b>1,200 vahid</b>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section green">
+    <h2>📐 Taksitli İstiqrazın Dəyəri</h2>
+    <p style="font-size:13px; margin-bottom:8px;">Əsas pul bərabər taksitlə ödənilir — hər il ödəniş azalır.</p>
+    
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAcc(this)">📊 Misal: 1000 AZN nominal, 12% kupon, 10% bazar faizi, 4 il, taksitli <span class="accordion-arrow">▼</span></div>
+      <div class="accordion-body">
+        <table style="font-size:12px;">
+          <tr><th>İl</th><th>Əsas pul</th><th>Kupon faizi</th><th>Əsas taksit</th><th>Toplam ödəniş</th></tr>
+          <tr><td>1</td><td>1000</td><td>1000×0.12=120</td><td>250</td><td>370</td></tr>
+          <tr><td>2</td><td>750</td><td>750×0.12=90</td><td>250</td><td>340</td></tr>
+          <tr><td>3</td><td>500</td><td>500×0.12=60</td><td>250</td><td>310</td></tr>
+          <tr><td>4</td><td>250</td><td>250×0.12=30</td><td>250</td><td>280</td></tr>
+        </table>
+        <p style="font-size:12px; margin-top:8px;">Dəyər = 370/1.1 + 340/1.1² + 310/1.1³ + 280/1.1⁴ diskontlaşdırılır</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ PAGE 6: KALKULYATOR ============ -->
+<div id="kalkulyator" class="page">
+
+  <div class="section">
+    <h2>🧮 İstiqraz Qiyməti</h2>
+    <div class="calc-box">
+      <label style="font-size:13px; color:#4a5568;">Nominal dəyər ($):</label>
+      <input type="number" id="b_nominal" value="1000">
+      <label style="font-size:13px; color:#4a5568;">Kupon dərəcəsi (%):</label>
+      <input type="number" id="b_kupon" value="8">
+      <label style="font-size:13px; color:#4a5568;">Tələb olunan gəlirlilik (%):</label>
+      <input type="number" id="b_r" value="10">
+      <label style="font-size:13px; color:#4a5568;">İl sayı:</label>
+      <input type="number" id="b_n" value="5">
+      <button onclick="calcBond()">Hesabla</button>
+      <div class="result" id="bond_result">Nəticə burada görünəcək</div>
+    </div>
+  </div>
+
+  <div class="section green">
+    <h2>🧮 Gordon Modeli (Sabit Artım)</h2>
+    <div class="calc-box">
+      <label style="font-size:13px; color:#4a5568;">D₀ — cari divident (manat):</label>
+      <input type="number" id="g_d0" value="5" step="0.01">
+      <label style="font-size:13px; color:#4a5568;">g — artım tempi (%):</label>
+      <input type="number" id="g_g" value="5">
+      <label style="font-size:13px; color:#4a5568;">R — tələb olunan gəlirlilik (%):</label>
+      <input type="number" id="g_r" value="9">
+      <button onclick="calcGordon()">Hesabla</button>
+      <div class="result" id="gordon_result">Nəticə burada görünəcək</div>
+    </div>
+  </div>
+
+  <div class="section orange">
+    <h2>🧮 CAPM</h2>
+    <div class="calc-box">
+      <label style="font-size:13px; color:#4a5568;">Rf — risksiz dərəcə (%):</label>
+      <input type="number" id="c_rf" value="5">
+      <label style="font-size:13px; color:#4a5568;">Rm — bazar gəlirliliyi (%):</label>
+      <input type="number" id="c_rm" value="12">
+      <label style="font-size:13px; color:#4a5568;">β — Beta əmsalı:</label>
+      <input type="number" id="c_beta" value="1.2" step="0.1">
+      <button onclick="calcCAPM()">Hesabla</button>
+      <div class="result" id="capm_result">Nəticə burada görünəcək</div>
+    </div>
+  </div>
+
+  <div class="section purple">
+    <h2>🧮 EOQ Kalkulyatoru</h2>
+    <div class="calc-box">
+      <label style="font-size:13px; color:#4a5568;">D — İllik tələb (vahid):</label>
+      <input type="number" id="e_d" value="72000">
+      <label style="font-size:13px; color:#4a5568;">C₀ — Sifariş xərci ($):</label>
+      <input type="number" id="e_co" value="9">
+      <label style="font-size:13px; color:#4a5568;">Cₕ — Saxlama xərci ($/vahid/il):</label>
+      <input type="number" id="e_ch" value="0.05" step="0.01">
+      <button onclick="calcEOQ()">Hesabla</button>
+      <div class="result" id="eoq_result">Nəticə burada görünəcək</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🧮 Fişer Effekti</h2>
+    <div class="calc-box">
+      <label style="font-size:13px; color:#4a5568;">R — Nominal faiz dərəcəsi (%):</label>
+      <input type="number" id="f_R" value="10">
+      <label style="font-size:13px; color:#4a5568;">h — İnflyasiya tempi (%):</label>
+      <input type="number" id="f_h" value="5">
+      <button onclick="calcFisher()">Real gəlirliliyi hesabla</button>
+      <div class="result" id="fisher_result">Nəticə burada görünəcək</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ PAGE 7: QUIZ ============ -->
+<div id="quiz" class="page">
+  <div class="section">
+    <h2>📝 Özünü Yoxla</h2>
+    <p style="font-size:13px; color:#64748b; margin-bottom:12px;">Test suallarından seçilmiş nümunələr. Cavabı seç, düzgünlüyünü öyrən:</p>
+
+    <div id="quiz_container"></div>
+
+    <button onclick="loadQuiz()" style="width:100%; padding:12px; background:#1e3a5f; color:white; border:none; border-radius:8px; font-size:14px; cursor:pointer; margin-top:10px; font-weight:600;">🔄 Yeni Suallar Gətir</button>
+  </div>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function toggleAcc(header) {
+  const body = header.nextElementSibling;
+  const arrow = header.querySelector('.accordion-arrow');
+  body.classList.toggle('open');
+  if (arrow) arrow.classList.toggle('open');
+}
+
+function toggleSolution(btn) {
+  const sol = btn.nextElementSibling;
+  sol.classList.toggle('show');
+  btn.textContent = sol.classList.contains('show') ? '🔼 Gizlət' : '✅ Həll yolunu göstər';
+}
+
+function calcBond() {
+  const N = parseFloat(document.getElementById('b_nominal').value);
+  const c = parseFloat(document.getElementById('b_kupon').value) / 100;
+  const r = parseFloat(document.getElementById('b_r').value) / 100;
+  const n = parseFloat(document.getElementById('b_n').value);
+  const coupon = N * c;
+  const pvCoupons = coupon * (1 - Math.pow(1+r, -n)) / r;
+  const pvNominal = N / Math.pow(1+r, n);
+  const price = pvCoupons + pvNominal;
+  const currentYield = (coupon / price * 100).toFixed(2);
+  document.getElementById('bond_result').innerHTML = 
+    `💰 Bazar qiyməti: <b>$${price.toFixed(2)}</b><br>
+    📊 Cari gəlirlilik: ${currentYield}%<br>
+    ${price > N ? '📈 Premium istiqraz (qiymət > nominal)' : price < N ? '📉 Diskont istiqraz (qiymət < nominal)' : '⚖️ Par (qiymət = nominal)'}`;
+}
+
+function calcGordon() {
+  const d0 = parseFloat(document.getElementById('g_d0').value);
+  const g = parseFloat(document.getElementById('g_g').value) / 100;
+  const R = parseFloat(document.getElementById('g_r').value) / 100;
+  if (R <= g) {
+    document.getElementById('gordon_result').innerHTML = '❌ Xəta: R > g olmalıdır!';
+    return;
+  }
+  const d1 = d0 * (1 + g);
+  const p0 = d1 / (R - g);
+  const divYield = (d1 / p0 * 100).toFixed(2);
+  document.getElementById('gordon_result').innerHTML = 
+    `📊 D₁ = ${d1.toFixed(2)} manat<br>
+    💰 P₀ = <b>${p0.toFixed(2)} manat</b><br>
+    🎯 Divident gəlirliliyi = ${divYield}%<br>
+    📈 Kapital artımı = ${(g*100).toFixed(1)}%<br>
+    ✅ Cəmi gəlirlilik = ${(R*100).toFixed(1)}%`;
+}
+
+function calcCAPM() {
+  const Rf = parseFloat(document.getElementById('c_rf').value);
+  const Rm = parseFloat(document.getElementById('c_rm').value);
+  const beta = parseFloat(document.getElementById('c_beta').value);
+  const R = Rf + beta * (Rm - Rf);
+  const riskPremium = Rm - Rf;
+  document.getElementById('capm_result').innerHTML = 
+    `📊 Bazar risk premiyası: ${riskPremium.toFixed(1)}%<br>
+    🎯 Beta × Risk premiyası = ${(beta * riskPremium).toFixed(2)}%<br>
+    💰 Tələb olunan gəlirlilik: <b>${R.toFixed(1)}%</b>`;
+}
+
+function calcEOQ() {
+  const D = parseFloat(document.getElementById('e_d').value);
+  const Co = parseFloat(document.getElementById('e_co').value);
+  const Ch = parseFloat(document.getElementById('e_ch').value);
+  const EOQ = Math.sqrt(2 * Co * D / Ch);
+  const numOrders = D / EOQ;
+  const totalOrderCost = numOrders * Co;
+  const totalHoldingCost = (EOQ / 2) * Ch;
+  document.getElementById('eoq_result').innerHTML = 
+    `📦 EOQ = <b>${EOQ.toFixed(0)} vahid</b><br>
+    🔄 İllik sifariş sayı: ${numOrders.toFixed(1)}<br>
+    💰 Cəmi sifariş xərci: $${totalOrderCost.toFixed(2)}<br>
+    🏪 Cəmi saxlama xərci: $${totalHoldingCost.toFixed(2)}<br>
+    📊 Ümumi cəmi xərc: $${(totalOrderCost + totalHoldingCost).toFixed(2)}`;
+}
+
+function calcFisher() {
+  const R = parseFloat(document.getElementById('f_R').value) / 100;
+  const h = parseFloat(document.getElementById('f_h').value) / 100;
+  const r = (1 + R) / (1 + h) - 1;
+  const approx = (R - h) * 100;
+  document.getElementById('fisher_result').innerHTML = 
+    `🎯 Real gəlirlilik (dəqiq Fişer): <b>${(r * 100).toFixed(2)}%</b><br>
+    ≈ Təxmini (R−h): ${approx.toFixed(2)}%<br>
+    ⚠️ Fərq: ${((r - (R-h)) * 100).toFixed(2)}% — imtahanda dəqiq düsturu istifadə et!`;
+}
+
+const quizBank = [
+  { q: "İstiqrazın bazar qiyməti ilə MSG arasında hansı əlaqə var?", opts: ["Düz mütənasib", "Heç bir əlaqə yoxdur", "Tərs mütənasib", "Sabit xətti"], ans: 2, exp: "MSG artarsa qiymət düşür, MSG azalarsa qiymət artır — bu TƏRS mütənasib əlaqədir." },
+  { q: "Defolt nə deməkdir?", opts: ["Likvidlik riski", "Ödəniş qabiliyyətsizliyi", "Faiz dərəcəsi riski", "Sistem riski"], ans: 1, exp: "Defolt = emitentin kupon ödənişi və ya nominali geri qaytara bilməməsi." },
+  { q: "Sabit artım (Gordon) modelinin şərti nədir?", opts: ["g > R", "R > g", "g = 0", "R = 0"], ans: 1, exp: "Gordon modeli yalnız R > g olduqda işləyir. Əks halda qiymət mənfi və ya sonsuz olur." },
+  { q: "Beta əmsalı 0 olan aktivin riski necədir?", opts: ["Bazar qədər riskli", "Bazardan riskli", "Risksiz", "Mənfi riskli"], ans: 2, exp: "β=0 → risksiz aktiv (dövlət qısamüddətli istiqrazları). Bazar dəyişikliklərindən təsirlənmir." },
+  { q: "Diversifikasiya hansı riski aradan qaldırır?", opts: ["Sistem riski", "Qeyri-sistem riski", "Beta riski", "İnflyasiya riski"], ans: 1, exp: "Diversifikasiya yalnız QEYRİ-SİSTEM (firma-spesifik) riski azaldır. Sistem riski həmişə qalır." },
+  { q: "CAPM düsturu hansıdır?", opts: ["R = Rf + β×Rm", "R = Rf + β×(Rm−Rf)", "R = Rm × β", "R = Rf × β"], ans: 1, exp: "CAPM: R = Rf + β × (Rm − Rf). (Rm−Rf) bazar risk premiyasıdır." },
+  { q: "Kupon dərəcəsi MSG-dən aşağı olduqda istiqraz necə adlanır?", opts: ["Premium", "Par", "Diskont", "Sıfır kuponlu"], ans: 2, exp: "Kupon < MSG → Bazar qiyməti < Nominal → DİSKONT istiqraz." },
+  { q: "EOQ düsturu hansıdır?", opts: ["√(C₀×D/Cₕ)", "√(2×C₀×D/Cₕ)", "2×C₀×D/Cₕ", "√(2×Cₕ×D/C₀)"], ans: 1, exp: "EOQ = √(2×C₀×D÷Cₕ). Bu düstur sifariş və saxlama xərclərini tarazlaşdırır." },
+  { q: "Fişer effektinin dəqiq düsturu hansıdır?", opts: ["R = r + h", "1+R = (1+r)(1+h)", "r = R − h", "R = r/h"], ans: 1, exp: "1+R = (1+r)(1+h) — bu dəqiq Fişer düsturudur. Sadə toplama yalnız təxminidir." },
+  { q: "Ən yüksək kredit reytinqi hansıdır?", opts: ["Baa/BBB", "Ba/BB", "Aaa/AAA", "Caa/CCC"], ans: 2, exp: "Aaa (Moody's) / AAA (S&P) — ən yüksək keyfiyyət, ən az defolt riski." },
+  { q: "R > g şərti nə üçün lazımdır?", opts: ["İstiqraz üçün", "Gordon modeli üçün", "CAPM üçün", "EOQ üçün"], ans: 1, exp: "Gordon (sabit artım) modelinin şərti: R > g. Əks halda mənəşinə anlam vermər." },
+  { q: "Korrelyasiya ρ=-1 olduqda nə baş verir?", opts: ["Diversifikasiya mümkün deyil", "Tam mükəmməl diversifikasiya mümkündür", "Risk iki qat artır", "Gəlirlilik sıfıra enir"], ans: 1, exp: "ρ=-1 tam mənfi korrelyasiya — düzgün çəkilər seçilsə risk sıfıra endirilə bilər!" },
+];
+
+let usedIndices = [];
+function loadQuiz() {
+  if (usedIndices.length >= quizBank.length) usedIndices = [];
+  const available = quizBank.map((_, i) => i).filter(i => !usedIndices.includes(i));
+  const selected = available.sort(() => Math.random() - 0.5).slice(0, 5);
+  usedIndices.push(...selected);
+  
+  const container = document.getElementById('quiz_container');
+  container.innerHTML = '';
+  
+  selected.forEach((idx, qi) => {
+    const q = quizBank[idx];
+    const div = document.createElement('div');
+    div.className = 'quiz-question';
+    div.innerHTML = `<p>${qi + 1}. ${q.q}</p>`;
+    q.opts.forEach((opt, oi) => {
+      const span = document.createElement('span');
+      span.className = 'quiz-option';
+      span.textContent = `${['A','B','C','D'][oi]}) ${opt}`;
+      span.onclick = function() {
+        if (div.querySelector('.correct')) return;
+        div.querySelectorAll('.quiz-option').forEach(s => s.style.pointerEvents = 'none');
+        if (oi === q.ans) {
+          span.classList.add('correct');
+          const fb = document.createElement('div');
+          fb.className = 'quiz-feedback tip';
+          fb.textContent = '✅ Düzgün! ' + q.exp;
+          div.appendChild(fb);
+        } else {
+          span.classList.add('wrong');
+          div.querySelectorAll('.quiz-option')[q.ans].classList.add('correct');
+          const fb = document.createElement('div');
+          fb.className = 'quiz-feedback warning';
+          fb.textContent = '❌ Yanlış. ' + q.exp;
+          div.appendChild(fb);
+        }
+      };
+      div.appendChild(span);
+    });
+    container.appendChild(div);
+  });
+}
+
+loadQuiz();
+</script>
+
+</body>
+</html>

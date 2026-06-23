@@ -4,18 +4,13 @@
 
 const Renderer = (() => {
 
-  // ---- Colors ----
   const C = {
     bg:           '#0a0a0a',
-    overlay:      'rgba(0,0,0,0.45)',
     overlayBuilt: 'rgba(74,124,89,0.12)',
     overlayHover: 'rgba(74,124,89,0.25)',
     wallBuilt:    'rgba(74,124,89,0.85)',
-    wallUnbuilt:  'rgba(80,80,80,0.6)',
-    textMain:     '#cccccc',
-    textDim:      '#555555',
+    wallHover:    'rgba(110,200,140,0.9)',
     textBuilt:    '#88cc99',
-    accent:       '#4a7c59',
     labelBg:      'rgba(0,0,0,0.72)',
   };
 
@@ -23,7 +18,6 @@ const Renderer = (() => {
   let roomRects = [];
   let hoveredRoom = null;
 
-  // Base image
   const baseImg = new Image();
   let imgLoaded = false;
   baseImg.onload = () => { imgLoaded = true; if (canvas) drawBase(); };
@@ -43,44 +37,25 @@ const Renderer = (() => {
     canvas.height = H;
   }
 
-  // ---- Room layout (relative to image, 0-1 scale) ----
-  // Based on pixel art PNG layout (971x1619 px):
-  //   garden:        top section, full width
-  //   kitchen area:  middle-left (waterCollector + workbench stacked)
-  //   bedroom:       middle-right
-  //   medStation:    lower-left block
-  //   weaponRack:    lower-right block
-  //   storageRoom:   lower-left secondary (with ammo box area)
-  //   radioRoom:     lower-right secondary (storage shelves)
-  //   entrance:      bottom strip (optional, no room action)
-
-  // Zones are [x, y, w, h] as fraction of canvas (after fitting the image)
   const ROOM_ZONES = {
-    garden:        [0.03, 0.01, 0.94, 0.19],  // top garden rows
-    waterCollector:[0.03, 0.22, 0.38, 0.16],  // kitchen left side (water barrel area)
-    workbench:     [0.03, 0.39, 0.38, 0.14],  // craft table area below kitchen
-    bedroom:       [0.43, 0.22, 0.54, 0.31],  // right bedroom
-    medStation:    [0.03, 0.55, 0.38, 0.18],  // med cross area
-    weaponRack:    [0.43, 0.55, 0.54, 0.18],  // weapon rack right
-    storageRoom:   [0.03, 0.74, 0.38, 0.13],  // ammo/generator left
-    radioRoom:     [0.43, 0.74, 0.54, 0.13],  // storage shelves right
+    garden:        [0.03, 0.01, 0.94, 0.19],
+    waterCollector:[0.03, 0.22, 0.38, 0.16],
+    workbench:     [0.03, 0.39, 0.38, 0.14],
+    bedroom:       [0.43, 0.22, 0.54, 0.31],
+    medStation:    [0.03, 0.55, 0.38, 0.18],
+    weaponRack:    [0.43, 0.55, 0.54, 0.18],
+    storageRoom:   [0.03, 0.74, 0.38, 0.13],
+    radioRoom:     [0.43, 0.74, 0.54, 0.13],
   };
 
   function getImgRect() {
-    // Fit image into canvas (object-fit: contain style)
     const imgAspect = 971 / 1619;
     const canvasAspect = W / H;
     let iw, ih, ix, iy;
     if (canvasAspect < imgAspect) {
-      iw = W;
-      ih = W / imgAspect;
-      ix = 0;
-      iy = (H - ih) / 2;
+      iw = W; ih = W / imgAspect; ix = 0; iy = (H - ih) / 2;
     } else {
-      ih = H;
-      iw = H * imgAspect;
-      ix = (W - iw) / 2;
-      iy = 0;
+      ih = H; iw = H * imgAspect; ix = (W - iw) / 2; iy = 0;
     }
     return { x: ix, y: iy, w: iw, h: ih };
   }
@@ -106,22 +81,18 @@ const Renderer = (() => {
     ctx.closePath();
   }
 
-  // ---- Main draw function ----
   function drawBase() {
     if (!canvas) return;
     const st = State.get();
     ctx.clearRect(0, 0, W, H);
 
-    // Background
     ctx.fillStyle = C.bg;
     ctx.fillRect(0, 0, W, H);
 
     const imgRect = getImgRect();
 
-    // Draw base image
     if (imgLoaded) {
       ctx.drawImage(baseImg, imgRect.x, imgRect.y, imgRect.w, imgRect.h);
-      // Darken overlay so UI elements are readable
       ctx.fillStyle = 'rgba(0,0,0,0.28)';
       ctx.fillRect(imgRect.x, imgRect.y, imgRect.w, imgRect.h);
     } else {
@@ -131,36 +102,29 @@ const Renderer = (() => {
 
     roomRects = [];
 
-    // Draw room overlays
-    const roomIds = Object.keys(ROOM_ZONES);
-    roomIds.forEach(roomId => {
-      const rect  = getRoomRect(roomId, imgRect);
-      const built = st.rooms[roomId]?.built;
-      const def   = ROOMS[roomId];
+    Object.keys(ROOM_ZONES).forEach(roomId => {
+      const rect      = getRoomRect(roomId, imgRect);
+      const built     = st.rooms[roomId]?.built;
+      const def       = ROOMS[roomId];
       const isHovered = hoveredRoom === roomId;
 
       roomRects.push({ roomId, ...rect });
 
-      // Highlight overlay
-      if (isHovered) {
-        ctx.fillStyle = C.overlayHover;
-        ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
-      } else if (built) {
-        ctx.fillStyle = C.overlayBuilt;
+      // Overlay tint on hover or built
+      if (isHovered || built) {
+        ctx.fillStyle = isHovered ? C.overlayHover : C.overlayBuilt;
         ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
       }
 
-      // Border
-      ctx.lineWidth   = isHovered ? 2.5 : (built ? 1.8 : 1.2);
-      ctx.strokeStyle = built
-        ? (isHovered ? 'rgba(110,200,140,0.9)' : C.wallBuilt)
-        : (isHovered ? 'rgba(160,160,160,0.7)' : C.wallUnbuilt);
-      if (!built) ctx.setLineDash([5, 5]);
-      sketchRect(rect.x, rect.y, rect.w, rect.h, 1.2);
-      ctx.stroke();
-      ctx.setLineDash([]);
+      // Border — only draw when hovered
+      if (isHovered) {
+        ctx.lineWidth   = 2.5;
+        ctx.strokeStyle = built ? C.wallHover : 'rgba(160,160,160,0.7)';
+        sketchRect(rect.x, rect.y, rect.w, rect.h, 1.2);
+        ctx.stroke();
+      }
 
-      // Label pill at bottom of zone
+      // Room label pill
       const label = `${def.icon} ${def.name}`;
       const fsize = Math.max(9, Math.min(13, rect.w * 0.12));
       ctx.font = `${fsize}px "Special Elite", monospace`;
@@ -168,43 +132,48 @@ const Renderer = (() => {
       const lx = rect.x + rect.w / 2;
       const ly = rect.y + rect.h - 6;
 
-      // Pill background
       ctx.fillStyle = C.labelBg;
       ctx.beginPath();
       ctx.roundRect(lx - tw / 2 - 6, ly - fsize - 3, tw + 12, fsize + 7, 3);
       ctx.fill();
 
-      ctx.fillStyle = built ? C.textBuilt : C.textDim;
+      ctx.fillStyle = C.textBuilt;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';
       ctx.fillText(label, lx, ly);
 
-      // "İnşa et" hint for unbuilt rooms
-      if (!built && isHovered && def.cost && Object.keys(def.cost).length > 0) {
-        const costStr = Object.entries(def.cost)
-          .map(([k, v]) => `${v}×${ITEMS[k]?.icon || k}`)
-          .join(' ');
-        const cf = Math.max(8, fsize - 2);
-        ctx.font = `${cf}px "Courier Prime", monospace`;
-        const cw = ctx.measureText(costStr).width;
-        ctx.fillStyle = 'rgba(0,0,0,0.75)';
-        ctx.beginPath();
-        ctx.roundRect(lx - cw / 2 - 5, ly - fsize * 2 - 10, cw + 10, cf + 6, 3);
-        ctx.fill();
-        ctx.fillStyle = '#888';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'bottom';
-        ctx.fillText(costStr, lx, ly - fsize - 5);
-      }
+      // Lock icon for unbuilt rooms
+      if (!built) {
+        const cx = rect.x + rect.w / 2;
+        const cy = rect.y + rect.h / 2 - 10;
+        const sz = Math.max(14, Math.min(22, rect.h * 0.2));
 
-      // "?" for completely unbuilt, not hovered
-      if (!built && !isHovered) {
-        const isize = Math.max(14, Math.min(24, rect.h * 0.22));
-        ctx.font = `${isize}px serif`;
-        ctx.fillStyle = 'rgba(80,80,80,0.5)';
+        ctx.font = `${sz}px serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('?', rect.x + rect.w / 2, rect.y + rect.h / 2 - 10);
+
+        // Shadow
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillText('🔒', cx + 1, cy + 1);
+        ctx.fillText('🔒', cx, cy);
+
+        // Build cost hint on hover
+        if (isHovered && def.cost && Object.keys(def.cost).length > 0) {
+          const costStr = Object.entries(def.cost)
+            .map(([k, v]) => `${v}×${ITEMS[k]?.icon || k}`)
+            .join(' ');
+          const cf = Math.max(8, fsize - 1);
+          ctx.font = `${cf}px "Courier Prime", monospace`;
+          const cw = ctx.measureText(costStr).width;
+          ctx.fillStyle = 'rgba(0,0,0,0.75)';
+          ctx.beginPath();
+          ctx.roundRect(lx - cw / 2 - 5, ly - fsize * 2 - 10, cw + 10, cf + 6, 3);
+          ctx.fill();
+          ctx.fillStyle = '#888';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          ctx.fillText(costStr, lx, ly - fsize - 5);
+        }
       }
     });
   }
